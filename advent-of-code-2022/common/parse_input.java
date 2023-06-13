@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class ParseInput {
     
+    // Practice for learning package structure
     public static String identity(String s) {
         return s;
     }
