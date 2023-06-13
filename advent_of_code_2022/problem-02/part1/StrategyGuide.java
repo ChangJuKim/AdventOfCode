@@ -1,4 +1,4 @@
-import AoC2022.Common.ParseInput;
+import advent_of_code_2022.common.ParseInput;
 
 public class StrategyGuide {
 

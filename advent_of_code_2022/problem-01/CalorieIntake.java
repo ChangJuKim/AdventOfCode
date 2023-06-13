@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.io.StringReader;
 import java.math.BigInteger;
 
 public class CalorieIntake {

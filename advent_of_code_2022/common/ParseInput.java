@@ -1,4 +1,4 @@
-package AoC2022.Common;
+package advent_of_code_2022.common;
 
 import java.io.File;
 import java.io.FileNotFoundException;
