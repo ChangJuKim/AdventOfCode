@@ -62,8 +62,8 @@ public class StrategyGuide {
      * The score is determined by 6 points for a win, and 3 points for a draw.
      * In addition, the player gets 1 point for rock, 2 points for paper and 3 points for scissors.
      * 
-     * @param opponentAction the opponent's action ('A', 'B', or 'C')
-     * @param myAction the player's action ('X', 'Y', 'Z')
+     * @param opponentAction the opponent's action ('A': rock, 'B': paper, or 'C': scissors)
+     * @param myAction the player's action ('X': rock, 'Y': paper, 'Z': scissors)
      * @return the calculated score based on the actions
      */
     private static int calculateScore(char opponentAction, char myAction) {
