@@ -1,9 +1,7 @@
 import java.util.Scanner;
 import java.math.BigInteger;
 
-public class CalorieIntake {
-
-    
+public class CalorieIntake {    
     // // Part 1
     // public static void main(String[] args) {
     //     System.out.println("Paste input here. Type q to quit:");

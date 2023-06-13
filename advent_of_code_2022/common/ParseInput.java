@@ -13,8 +13,13 @@ public class ParseInput {
     }
 
     public static String[] parseInput(String fileName) {
+        File file = new File(fileName);
+        return parseInput(file);
+    }
+
+    public static String[] parseInput(File file) {
         String[] linesArray = new String[0];
-        try (Scanner scanner = new Scanner(new File(fileName))) {
+        try (Scanner scanner = new Scanner(file)) {
             ArrayList<String> lines = new ArrayList<String>();
             
             while (scanner.hasNextLine()) {
@@ -24,7 +29,7 @@ public class ParseInput {
 
             linesArray = lines.toArray(new String[0]);
         } catch (FileNotFoundException ex) {
-            System.out.println("File not found: " + fileName);
+            System.out.println("File not found: " + file);
         }
         return linesArray;
     }
