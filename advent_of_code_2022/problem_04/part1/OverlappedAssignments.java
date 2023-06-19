@@ -5,10 +5,11 @@ import advent_of_code_2022.common.ParseInput;
 public class OverlappedAssignments {
 
     static final String FILE_NAME = "advent_of_code_2022/problem_04/input.txt";
+    static final String ASSIGNMENT_PAIR_REGEX = "\\d+-\\d+,\\d+-\\d+";
     
     public static void main(String[] args) {
         String[] assignmentsList = ParseInput.parseInput(FILE_NAME);
-        System.out.println("There are " + numOverlappingPairs(assignmentsList) + " pairs in which one range fully contains the other.");
+        System.out.println("There are " + countFullyContainedPairs(assignmentsList) + " pairs in which one range fully contains the other.");
     }
 
     /**
@@ -17,14 +18,20 @@ public class OverlappedAssignments {
      * @param assignmentsList The input list. A list of strings in the following format: #-#,#-#. The first two numbers form one timeslot, the next two another.
      * @return The number of pairs in which one timeslot overlaps with another.
      */
-    public static int numOverlappingPairs(String[] assignmentsList) {
+    public static int countFullyContainedPairs(String[] assignmentsList) {
         int total = 0;
         for (int i = 0; i < assignmentsList.length; i++) {        
             if (!validateAssignmentPair(assignmentsList[i])) {
                 throw new IllegalArgumentException("Assignment pair " + i + " does not match the format #-#,#-#: " + assignmentsList[i]);
             }
-            if (isOverlapping(assignmentsList[i])) {
-                total++;
+
+            try {
+                if (isFullyContained(assignmentsList[i])) {
+                    total++;
+                }
+            } catch (NumberFormatException ex) {
+                // Should never run as we validate input in validateAssignmentPair function
+                throw new IllegalArgumentException("Invalid input for " + assignmentsList[i] + ". " + ex);
             }
         }
         return total;
@@ -36,7 +43,7 @@ public class OverlappedAssignments {
      * @param assignmentPair A string representing a pair of assignments in the format: #-#,#-#
      * @return True if one pair encompasses the other, false otherwise
      */
-    private static boolean isOverlapping(String assignmentPair) {
+    private static boolean isFullyContained(String assignmentPair) {
         int firstDashIndex = assignmentPair.indexOf('-');
         int commaIndex = assignmentPair.indexOf(',');
         int secondDashIndex = assignmentPair.indexOf('-', commaIndex);
@@ -71,7 +78,6 @@ public class OverlappedAssignments {
      * @return True if is valid, false otherwise
      */
     private static boolean validateAssignmentPair(String assignmentPair) {
-        String regex = "\\d+-\\d+,\\d+-\\d+";
-        return assignmentPair.matches(regex);
+        return assignmentPair.matches(ASSIGNMENT_PAIR_REGEX);
     }
 }
