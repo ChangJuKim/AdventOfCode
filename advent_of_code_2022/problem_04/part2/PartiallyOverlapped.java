@@ -1,24 +1,24 @@
-package advent_of_code_2022.problem_04.part1;
+package advent_of_code_2022.problem_04.part2;
 
 import advent_of_code_2022.common.ParseInput;
 
-public class OverlappedAssignments {
+public class PartiallyOverlapped {
 
     static final String FILE_NAME = "advent_of_code_2022/problem_04/input.txt";
     static final String ASSIGNMENT_PAIR_REGEX = "\\d+-\\d+,\\d+-\\d+";
     
     public static void main(String[] args) {
         String[] assignmentsList = ParseInput.parseInput(FILE_NAME);
-        System.out.println("There are " + countFullyContainedPairs(assignmentsList) + " pairs in which one range fully contains the other.");
+        System.out.println("There are " + countPartiallyContainedPairs(assignmentsList) + " pairs in which one range partially contains the other.");
     }
 
     /**
-     * Each string forms one pair of timeslots separated by a comma. A pair is overlapping if one timeslot fully contains the other. 
+     * Each string forms one pair of timeslots separated by a comma. Counts the number of partially overlapped pairs. 
      * 
      * @param assignmentsList The input list. A list of strings in the following format: #-#,#-#. The first two numbers form one timeslot, the next two another.
      * @return The number of pairs in which one timeslot overlaps with another.
      */
-    public static int countFullyContainedPairs(String[] assignmentsList) {
+    public static int countPartiallyContainedPairs(String[] assignmentsList) {
         int total = 0;
         for (int i = 0; i < assignmentsList.length; i++) {        
             if (!validateAssignmentPair(assignmentsList[i])) {
@@ -26,7 +26,7 @@ public class OverlappedAssignments {
             }
 
             try {
-                if (isFullyContained(assignmentsList[i])) {
+                if (isPartiallyContained(assignmentsList[i])) {
                     total++;
                 }
             } catch (NumberFormatException ex) {
@@ -38,12 +38,12 @@ public class OverlappedAssignments {
     }
 
     /**
-     * Extracts the start and end times of the two assignments, and sees if one encompasses the other
+     * Extracts the start and end times of the two assignments, and sees if one overlaps with the other
      * 
      * @param assignmentPair A string representing a pair of assignments in the format: #-#,#-#
-     * @return True if one pair encompasses the other, false otherwise
+     * @return True if one pair overlaps with the other, false otherwise
      */
-    private static boolean isFullyContained(String assignmentPair) {
+    private static boolean isPartiallyContained(String assignmentPair) {
         int firstDashIndex = assignmentPair.indexOf('-');
         int commaIndex = assignmentPair.indexOf(',');
         int secondDashIndex = assignmentPair.indexOf('-', commaIndex);
@@ -57,7 +57,7 @@ public class OverlappedAssignments {
             throw new IllegalArgumentException("Invalid assignment time: " + assignmentPair);
         }
 
-        return start1 <= start2 && end1 >= end2 || start1 >= start2 && end1 <= end2;
+        return start1 <= end2 && end1 >= start2;
     }
 
     /**
