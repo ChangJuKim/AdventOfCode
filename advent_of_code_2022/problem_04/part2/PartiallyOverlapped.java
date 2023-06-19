@@ -6,6 +6,8 @@ public class PartiallyOverlapped {
 
     static final String FILE_NAME = "advent_of_code_2022/problem_04/input.txt";
     static final String ASSIGNMENT_PAIR_REGEX = "\\d+-\\d+,\\d+-\\d+";
+    private static final String INVALID_INPUT_FORMAT_MSG = "Assignment pair does not match the format #-#,#-#: ";
+    private static final String INVALID_ASSIGNMENT_TIMES_MSG = "Invalid assignment time: ";
     
     public static void main(String[] args) {
         String[] assignmentsList = ParseInput.parseInput(FILE_NAME);
@@ -22,7 +24,7 @@ public class PartiallyOverlapped {
         int total = 0;
         for (int i = 0; i < assignmentsList.length; i++) {        
             if (!validateAssignmentPair(assignmentsList[i])) {
-                throw new IllegalArgumentException("Assignment pair " + i + " does not match the format #-#,#-#: " + assignmentsList[i]);
+                throw new IllegalArgumentException(INVALID_INPUT_FORMAT_MSG + assignmentsList[i]);
             }
 
             try {
@@ -31,7 +33,7 @@ public class PartiallyOverlapped {
                 }
             } catch (NumberFormatException ex) {
                 // Should never run as we validate input in validateAssignmentPair function
-                throw new IllegalArgumentException("Invalid input for " + assignmentsList[i] + ". " + ex);
+                throw new IllegalArgumentException(INVALID_INPUT_FORMAT_MSG + assignmentsList[i] + ". " + ex);
             }
         }
         return total;
@@ -54,7 +56,7 @@ public class PartiallyOverlapped {
         int end2 = Integer.parseInt(assignmentPair.substring(secondDashIndex+1));
         
         if (!validateTimeslot(start1, end1) || !validateTimeslot(start2, end2)) {
-            throw new IllegalArgumentException("Invalid assignment time: " + assignmentPair);
+            throw new IllegalArgumentException(INVALID_ASSIGNMENT_TIMES_MSG + assignmentPair);
         }
 
         return start1 <= end2 && end1 >= start2;
