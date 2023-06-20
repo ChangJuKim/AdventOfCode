@@ -9,7 +9,7 @@ public class FindBadge {
     static final String FILE_NAME = "advent_of_code_2022/problem_03/input.txt";
     
     public static void main(String[] args) {
-        String[] rucksacks = ParseInput.parseInput(FILE_NAME);
+        String[] rucksacks = ParseInput.parseInputAsList(FILE_NAME);
         System.out.println("The sum of badge priorities is " + findBadge(rucksacks));
     }
 

@@ -12,12 +12,12 @@ public class ParseInput {
         return s;
     }
 
-    public static String[] parseInput(String fileName) {
+    public static String[] parseInputAsList(String fileName) {
         File file = new File(fileName);
-        return parseInput(file);
+        return parseInputAsList(file);
     }
 
-    public static String[] parseInput(File file) {
+    public static String[] parseInputAsList(File file) {
         String[] linesArray = new String[0];
         try (Scanner scanner = new Scanner(file)) {
             ArrayList<String> lines = new ArrayList<String>();

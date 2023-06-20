@@ -12,7 +12,7 @@ public class StrategyGuide {
 
 
     public static void main(String[] args) {
-        String[] inputArray = ParseInput.parseInput(new File(INPUT_PATH));
+        String[] inputArray = ParseInput.parseInputAsList(new File(INPUT_PATH));
         int score = 0;
         try {
             score = findTotalScore(inputArray);

@@ -8,7 +8,7 @@ public class FullyOverlapped {
     static final String ASSIGNMENT_PAIR_REGEX = "\\d+-\\d+,\\d+-\\d+";
     
     public static void main(String[] args) {
-        String[] assignmentsList = ParseInput.parseInput(FILE_NAME);
+        String[] assignmentsList = ParseInput.parseInputAsList(FILE_NAME);
         System.out.println("There are " + countFullyContainedPairs(assignmentsList) + " pairs in which one range fully contains the other.");
     }
 

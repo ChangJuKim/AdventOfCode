@@ -10,7 +10,7 @@ public class PartiallyOverlapped {
     private static final String INVALID_ASSIGNMENT_TIMES_MSG = "Invalid assignment time: ";
     
     public static void main(String[] args) {
-        String[] assignmentsList = ParseInput.parseInput(FILE_NAME);
+        String[] assignmentsList = ParseInput.parseInputAsList(FILE_NAME);
         System.out.println("There are " + countPartiallyContainedPairs(assignmentsList) + " pairs in which one range partially contains the other.");
     }
 
