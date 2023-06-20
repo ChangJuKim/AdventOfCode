@@ -12,7 +12,7 @@ public class StackCrates {
     static final Integer CRATE_SIZE = 3;
 
     public static void main(String[] args) {
-        String[] input = ParseInput.parseInput(INPUT_FILE_NAME);
+        String[] input = ParseInput.parseInputAsList(INPUT_FILE_NAME);
         System.out.println("The crates at the top of each stack are " + findTopCrates(input));
     }
 
