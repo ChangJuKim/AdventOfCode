@@ -12,23 +12,23 @@ public class DistinctFourteenSubstring {
 
     public static void main(String[] args) {
         String input = ParseInput.parseInputAsString(INPUT_FILE_NAME);
-        System.out.println("You will find a substring length " + SUBSTRING_LENGTH + " with all distinct characters after " + countCharsUntilDistinctFourSubstring(input) + " characters");
+        System.out.println("You will find a substring length " + SUBSTRING_LENGTH + " with all distinct characters after " + findFirstDistinctSubstringIndex(input) + " characters");
     }
 
     /**
      * Finds the first instance of a SUBSTRING_LENGTH substring that has all distinct characters. Returns how many characters you would have
-     * to pass in the buffer (input) to reach the end of that substring.
+     * to pass in the input to reach the end of that substring.
      * 
-     * @param buffer String and input
+     * @param input String and input
      * @return The index+1 of the first instance of a desired length substring with all distinct characters.
      */
-    public static int countCharsUntilDistinctFourSubstring(String buffer) {
+    public static int findFirstDistinctSubstringIndex(String input) {
         int counter = 0;
         Map<Character, Integer> map = new HashMap<>();
-        while (counter < buffer.length()) {
-            addInstanceToMap(map, buffer.charAt(counter));
+        while (counter < input.length()) {
+            addInstanceToMap(map, input.charAt(counter));
             if (counter >= SUBSTRING_LENGTH) {
-                removeInstanceFromMap(map, buffer.charAt(counter - SUBSTRING_LENGTH));
+                removeInstanceFromMap(map, input.charAt(counter - SUBSTRING_LENGTH));
             }
             if (map.size() >= SUBSTRING_LENGTH) {
                 // We have a substring of all distinct characters
@@ -36,7 +36,7 @@ public class DistinctFourteenSubstring {
             }
             counter++;
         }
-        return buffer.length();
+        return input.length();
     }
 
     /**
@@ -46,12 +46,11 @@ public class DistinctFourteenSubstring {
      * @param c Character to be removed
      */
     private static void removeInstanceFromMap(Map<Character, Integer> map, Character c) {
-        if (!map.containsKey(c)) {
-            throw new IllegalArgumentException("Tried to remove a nonexistent key (" + c + ") from the map: " + map);
-        }
-        map.put(c, map.get(c) - 1);
-        if (map.get(c) <= 0) {
-            map.remove(c);
+        if (map.containsKey(c)) {
+            map.put(c, map.get(c) - 1);
+            if (map.get(c) <= 0) {
+                map.remove(c);
+            }
         }
     }
 
