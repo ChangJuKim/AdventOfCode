@@ -33,4 +33,21 @@ public class ParseInput {
         }
         return linesArray;
     }
+
+    public static String parseInputAsString(String fileName) {
+        File file = new File(fileName);
+        return parseInputAsString(file);
+    }
+
+    public static String parseInputAsString(File file) {
+        StringBuilder builder = new StringBuilder();
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                builder.append(scanner.nextLine());
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + file);
+        }
+        return builder.toString();
+    }
 }
