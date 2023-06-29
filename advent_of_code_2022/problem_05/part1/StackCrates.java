@@ -8,7 +8,6 @@ import advent_of_code_2022.common.ParseInput;
 public class StackCrates {
     
     static final String INPUT_FILE_NAME = "advent_of_code_2022/problem_05/input.txt";
-    // Hardcoded value -- can do a pass through the crates to find the string size of each crate
     static final Integer CRATE_SIZE = 3;
 
     public static void main(String[] args) {
