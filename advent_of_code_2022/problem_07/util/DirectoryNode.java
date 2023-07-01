@@ -1,35 +1,45 @@
 package advent_of_code_2022.problem_07.util;
 
-import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.HashSet;
 
 // Custom tree class that keeps track of directory sizes and dependencies
 public class DirectoryNode {
-    private String name;
+    private String path;
     private HashMap<String, DirectoryNode> children;
-    private int currentLevelSize;
+    private HashSet<String> claimedFiles;
+    private BigInteger sizeOfLevel;
 
-    public DirectoryNode(String nodeName) {
-        name = nodeName;
-        children = new HashMap<>(children);
-        currentLevelSize = 0;
+    public DirectoryNode(String nodePath) {
+        path = nodePath;
+        children = new HashMap<>();
+        claimedFiles = new HashSet<>();
+        sizeOfLevel = BigInteger.ZERO;
     }
 
     public void addDirectory(DirectoryNode child) {
-        children.put(child.name, child);
+        children.put(child.path, child);
     }
 
     // Recursively gets the size of children and adds it to current directory's size.
-    public int getSize() {
-        int totalSize = currentLevelSize;
+    public BigInteger getSize() {
+        BigInteger totalSize = sizeOfLevel;
         for (DirectoryNode child : children.values()) {
-            totalSize += child.getSize();
+            totalSize = totalSize.add(child.getSize());
         }
         return totalSize;
     }
 
-    public void addFile(int fileSize) {
-        currentLevelSize += fileSize;
+    public void addFile(String fileName, int fileSize) {
+        if (!claimedFiles.contains(fileName)) {
+            claimedFiles.add(fileName);
+            sizeOfLevel = sizeOfLevel.add(new BigInteger("" + fileSize));
+        }
+    }
+
+    public String toString() {
+        return path;
     }
 
 
