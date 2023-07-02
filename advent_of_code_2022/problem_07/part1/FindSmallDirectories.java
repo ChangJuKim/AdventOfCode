@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import advent_of_code_2022.common.ParseInput;
 import advent_of_code_2022.problem_07.util.DirectoryNode;
+import advent_of_code_2022.problem_07.util.Constants;
 
 public class FindSmallDirectories {
     
@@ -22,18 +23,18 @@ public class FindSmallDirectories {
         HashMap<String, DirectoryNode> directoryMap = new HashMap<>();
         for (int i = 0; i < input.length; i++) {
             String[] line = input[i].split(" ");
-            if (line[0].equals("$") && line[1].equals("cd")) {
-                if (line[2].equals("/")) {
-                    currentLocation = "/";
-                } else if (line[2].equals("..")) {
+            if (line[0].equals(Constants.START_OF_COMMAND) && line[1].equals(Constants.CHANGE_DIRECTORY_COMMAND)) {
+                if (line[2].equals(Constants.ROOT_DIRECTORY)) {
+                    currentLocation = Constants.ROOT_DIRECTORY;
+                } else if (line[2].equals(Constants.PREVIOUS_DIRECTORY)) {
                     currentLocation = getPreviousDirectory(currentLocation);
-                } else if (line[2].equals(".")) {
+                } else if (line[2].equals(Constants.CURRENT_DIRECTORY)) {
                     // do nothing
                 } else {
                     currentLocation = currentLocation + "/" + line[2];
                 }
                 directoryMap.put(currentLocation, directoryMap.getOrDefault(currentLocation, new DirectoryNode(currentLocation)));
-            } else if (line[0].equals("$") && line[1].equals("ls")) {
+            } else if (line[0].equals(Constants.START_OF_COMMAND) && line[1].equals(Constants.LIST_DIRECTORIES_COMMAND)) {
                 i = handleLSCommandAndReturnIndex(input, i, currentLocation, directoryMap);
             } else {
                 throw new IllegalArgumentException("Error in input: " + line[i]);
@@ -65,14 +66,14 @@ public class FindSmallDirectories {
             String[] line = input[inputIndex].split(" ");
             String command = line[0];
             String argument = line[1];
-            if (command.equals("$")) break;
+            if (command.equals(Constants.START_OF_COMMAND)) break;
 
             DirectoryNode node = directoryMap.get(currentLocation);
             if (node == null) {
                 // Should never happen
                 throw new IllegalArgumentException("Node does not exist");
             }
-            if (command.equals("dir")) {
+            if (command.equals(Constants.DIRECTORY)) {
                 String directoryPath = currentLocation + "/" + argument;
                 directoryMap.put(directoryPath, directoryMap.getOrDefault(directoryPath, new DirectoryNode(directoryPath)));
                 node.addDirectory(directoryMap.get(directoryPath));
@@ -86,7 +87,7 @@ public class FindSmallDirectories {
                 }
             }
         }
-        // for loop will increment by 1
+        // for loop will increment by 1 so we decrement by 1 here
         return inputIndex - 1;
     }
 }
