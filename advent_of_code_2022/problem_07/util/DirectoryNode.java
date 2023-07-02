@@ -34,7 +34,7 @@ public class DirectoryNode {
     public void addFile(String fileName, int fileSize) {
         if (!claimedFiles.contains(fileName)) {
             claimedFiles.add(fileName);
-            sizeOfLevel = sizeOfLevel.add(new BigInteger("" + fileSize));
+            sizeOfLevel = sizeOfLevel.add(BigInteger.valueOf(fileSize));
         }
     }
 
