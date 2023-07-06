@@ -50,4 +50,46 @@ public class ParseInput {
         }
         return builder.toString();
     }
+
+    public static int[][] parseInputAsPositiveIntegerMatrix(String fileName) {
+        File file = new File(fileName);
+        return parseInputAsPositiveIntegerMatrix(file);
+    }
+
+    public static int[][] parseInputAsPositiveIntegerMatrix(File file) {
+        ArrayList<Integer[]> tempList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Integer[] row = new Integer[line.length()];
+
+                for (int i = 0; i < line.length(); i++) {
+                    row[i] = Integer.parseInt(line.substring(i,i+1));
+                    if (row[i] < 0 || row[i] > 9) {
+                        throw new IllegalArgumentException("File content is not numeric");
+                    }
+                }
+
+                tempList.add(row);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + file);
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex);
+        }
+
+        int[][] integerArray = new int[tempList.size()][];
+
+        for (int i = 0; i < integerArray.length; i++) {
+            Integer[] row = tempList.get(i);
+            integerArray[i] = new int[row.length];
+
+            for (int j = 0; j < row.length; j++) {
+                integerArray[i][j] = row[j];
+            }
+        }
+
+        return integerArray;
+    }
 }
