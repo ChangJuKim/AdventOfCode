@@ -26,7 +26,7 @@ public class VisibleTrees {
             updateVisiblity(forest, isVisible, direction[0], direction[1]);
         }
 
-        return countVisible(isVisible);
+        return countTrues(isVisible);
     }
 
     /**
@@ -71,13 +71,19 @@ public class VisibleTrees {
         }
     }
 
-    private static int countVisible(boolean[][] isVisible) {
-        int numVisible = 0;
-        for (int i = 0; i < isVisible.length; i++) {
-            for (int j = 0; j < isVisible[i].length; j++) {
-                if (isVisible[i][j]) numVisible++;
+    /**
+     * Counts the number of true values in a 2D boolean array
+     * 
+     * @param matrix A 2D boolean matrix 
+     * @return the number of true values in the matrix
+     */
+    private static int countTrues(boolean[][] matrix) {
+        int numTrues = 0;
+        for (boolean[] row : matrix) {
+            for (boolean value : row) {
+                if (value) numTrues++;
             }
         }
-        return numVisible;
+        return numTrues;
     }
 }

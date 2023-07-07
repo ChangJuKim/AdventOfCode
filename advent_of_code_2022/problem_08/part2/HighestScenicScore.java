@@ -1,5 +1,6 @@
 package advent_of_code_2022.problem_08.part2;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import advent_of_code_2022.common.ParseInput;
@@ -25,10 +26,8 @@ public class HighestScenicScore {
      */
     public static int maxScenicScore(int[][] forest) {
         int[][] treeScores = new int[forest.length][forest[0].length];
-        for (int i = 0; i < treeScores.length; i++) {
-            for (int j = 0; j < treeScores[i].length; j++) {
-                treeScores[i][j] = 1;
-            }
+        for (int[] row : treeScores) {
+            Arrays.fill(row, 1);
         }
 
         // Update visibility from all 4 directions
@@ -36,13 +35,7 @@ public class HighestScenicScore {
             updateScore(forest, treeScores, direction[0], direction[1]);
         }
 
-        int maxScore = 0;
-        for (int i = 0; i < treeScores.length; i++) {
-            for (int j = 0; j < treeScores[i].length; j++) {
-                maxScore = Math.max(maxScore, treeScores[i][j]);
-            }
-        }
-        return maxScore;
+        return findMaximumValue(treeScores);
     }
     
     /**
@@ -82,6 +75,7 @@ public class HighestScenicScore {
             int endRow = deltaX == -1 ? -1 : treeScores.length;
             
             for (int j = 0; j < treeScores.length; j++) {
+                // First is height of the tree, second is visibility of that tree
                 Stack<Pair<Integer, Integer>> stack = new Stack<>();
                 for (int i = startRow; i != endRow ; i += deltaX) {
                     int height = forest[i][j];
@@ -97,5 +91,21 @@ public class HighestScenicScore {
                 }
             }   
         }
+    }
+
+    /**
+     * Returns the maximum value in an 2D int array
+     * 
+     * @param matrix A 2D int array
+     * @return The maximum value in the array
+     */
+    private static int findMaximumValue(int[][] matrix) {
+        int maxValue = 0;
+        for (int[] row : matrix) {
+            for (int value : row) {
+                maxValue = Math.max(maxValue, value);
+            }
+        }
+        return maxValue;
     }
 }
