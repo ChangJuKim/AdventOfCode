@@ -3,6 +3,7 @@ package advent_of_code_2022.problem_08.part2;
 import java.util.Arrays;
 import java.util.Stack;
 
+import advent_of_code_2022.common.Pair;
 import advent_of_code_2022.common.ParseInput;
 
 public class HighestScenicScore {

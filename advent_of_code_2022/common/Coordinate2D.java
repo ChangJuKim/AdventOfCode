@@ -1,10 +1,10 @@
 package advent_of_code_2022.common;
 
-public class Coordinate {
+public class Coordinate2D {
     private final int x;
     private final int y;
 
-    public Coordinate(int _x, int _y) {
+    public Coordinate2D(int _x, int _y) {
         x = _x;
         y = _y;
     }
@@ -17,6 +17,16 @@ public class Coordinate {
         return y;
     }
 
+    // Distance if the coordinates can only travel vertically or horizontally
+    public int getManhattanDistance(Coordinate2D other) {
+        return Math.abs(x - other.x) + Math.abs(y - other.y);
+    }
+
+    // Distance if the coordinates can only travel vertically, horizontally or diagonally
+    public int getChebyshevDistance(Coordinate2D other) {
+        return Math.max(Math.abs(x - other.x), Math.abs(y - other.y));
+    }
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
@@ -27,7 +37,7 @@ public class Coordinate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Coordinate c = (Coordinate) o;
+        Coordinate2D c = (Coordinate2D) o;
         if (c.x == this.x && c.y == this.y) return true;
         return false;
     }

@@ -1,4 +1,4 @@
-package advent_of_code_2022.problem_08.part2;
+package advent_of_code_2022.common;
 
 public class Pair<T, U> {
     
