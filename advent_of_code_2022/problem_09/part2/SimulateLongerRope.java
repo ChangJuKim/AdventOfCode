@@ -63,7 +63,6 @@ public class SimulateLongerRope {
             }
             
             visited.add(rope.get(rope.size() - 1));
-            System.out.println(rope);
         }
 
         return rope;

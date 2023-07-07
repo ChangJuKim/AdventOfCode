@@ -1,7 +1,6 @@
 package advent_of_code_2022.test.problem_09;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
