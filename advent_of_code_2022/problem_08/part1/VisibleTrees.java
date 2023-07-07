@@ -26,13 +26,7 @@ public class VisibleTrees {
             updateVisiblity(forest, isVisible, direction[0], direction[1]);
         }
 
-        int numVisible = 0;
-        for (int i = 0; i < isVisible.length; i++) {
-            for (int j = 0; j < isVisible[i].length; j++) {
-                if (isVisible[i][j]) numVisible++;
-            }
-        }
-        return numVisible;
+        return countVisible(isVisible);
     }
 
     /**
@@ -77,5 +71,13 @@ public class VisibleTrees {
         }
     }
 
-
+    private static int countVisible(boolean[][] isVisible) {
+        int numVisible = 0;
+        for (int i = 0; i < isVisible.length; i++) {
+            for (int j = 0; j < isVisible[i].length; j++) {
+                if (isVisible[i][j]) numVisible++;
+            }
+        }
+        return numVisible;
+    }
 }
