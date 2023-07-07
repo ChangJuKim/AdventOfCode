@@ -3,7 +3,6 @@ package advent_of_code_2022.problem_08.part2;
 import java.util.Stack;
 
 import advent_of_code_2022.common.ParseInput;
-import advent_of_code_2022.common.PrintArray;
 
 public class HighestScenicScore {
     
@@ -32,8 +31,6 @@ public class HighestScenicScore {
             }
         }
 
-        PrintArray.print2DArray(treeScores);
-
         // Update visibility from all 4 directions
         for (Integer[] direction : DIRECTIONS) {
             updateScore(forest, treeScores, direction[0], direction[1]);
@@ -45,11 +42,9 @@ public class HighestScenicScore {
                 maxScore = Math.max(maxScore, treeScores[i][j]);
             }
         }
-
-        PrintArray.print2DArray(treeScores);
         return maxScore;
     }
-
+    
     /**
      * Updates the scores of all trees when they look in a certain direction.
      * Currently, directions are limited to (0, 1), (1, 0), (0, -1), (-1, 0).
@@ -69,12 +64,14 @@ public class HighestScenicScore {
                 // First is height of the tree, second is visibility of that tree
                 Stack<Pair<Integer, Integer>> stack = new Stack<>();
                 for (int j = startCol; j != endCol; j += deltaY) {
-                    int numVisible = 1;
-                    while (!stack.empty() && stack.peek().getFirst() < forest[i][j]) {
+                    int height = forest[i][j];
+                    // Border trees should see 0 visible trees. All others see at least 1 (the tree in front of them)
+                    int numVisible = j == startCol ? 0 : 1;
+                    while (!stack.empty() && stack.peek().getFirst() < height) {
                         numVisible += stack.pop().getSecond();
                     }
-                    treeScores[i][j] = numVisible;
-                    stack.push(new Pair<Integer, Integer>(forest[i][j], numVisible));
+                    treeScores[i][j] *= numVisible;
+                    stack.push(new Pair<Integer, Integer>(height, numVisible));
                 }
             }
         }
@@ -82,21 +79,23 @@ public class HighestScenicScore {
         // Traversing top down or down top
         else if (deltaY == 0) {
             int startRow = deltaX == -1 ? treeScores.length - 1 : 0;
-            int endRow = deltaX == -1 ? -1 : treeScores.length;    
-
-            for (int j = 0; j < treeScores[0].length; j++) {
+            int endRow = deltaX == -1 ? -1 : treeScores.length;
+            
+            for (int j = 0; j < treeScores.length; j++) {
                 Stack<Pair<Integer, Integer>> stack = new Stack<>();
-                for (int i = startRow; i != endRow; i += deltaX) {
-                    int numVisible = 0;
-                    while (!stack.empty() && stack.peek().getFirst() < forest[i][j]) {
+                for (int i = startRow; i != endRow ; i += deltaX) {
+                    int height = forest[i][j];
+                    // Border trees should see 0 visible trees. All others see at least 1 (the tree in front of them)
+                    int numVisible = i == startRow ? 0 : 1;
+
+                    while (!stack.empty() && stack.peek().getFirst() < height) {
                         numVisible += stack.pop().getSecond();
                     }
-                    treeScores[i][j] = numVisible;
-                    stack.push(new Pair<Integer, Integer>(forest[i][j], numVisible));
+                    
+                    treeScores[i][j] *= numVisible;
+                    stack.push(new Pair<Integer, Integer>(height, numVisible));
                 }
-            }
+            }   
         }
     }
-
-
 }
