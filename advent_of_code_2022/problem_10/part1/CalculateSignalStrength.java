@@ -12,8 +12,17 @@ public class CalculateSignalStrength {
         System.out.println("The total signal strength at the specified breakpoints is " + sumOfSignalStrengthAtBreakpoints(input));
     }
 
+    /**
+     * 
+     * Given a list of commands, calculates the sum of signal strengths at specified breakpoints.
+     * A signal strength = cycle (at a breakpoint) * register value.
+     * Thus, for breakpoints of {20, 60, 100}, the sum will be 20 * (register at cycle 20) + 60 * (register at 60) + 100 * (register at 100).
+     * 
+     * @param input The list of commands to be run. Each element will either be "noop" (move 1 cycle) or "addx num" (add num to the register after 2 cycles)
+     * @return The total sum of the signal strengths
+     */
     public static int sumOfSignalStrengthAtBreakpoints(String[] input) {
-        int currentCycle = 0;
+        int currentCycle = 1;
         int register = 1;
         int nextBreakpointIndex = 0;
         int cycleBreakpoint = SIGNAL_STRENGTH_BREAKPOINTS[nextBreakpointIndex];
@@ -28,9 +37,10 @@ public class CalculateSignalStrength {
                 System.out.println("Adding totalSum by " + register + " * " + cycleBreakpoint + " = " + register * cycleBreakpoint);
                 totalSum += register * cycleBreakpoint;
                 nextBreakpointIndex++;
-                // if (nextBreakpointIndex >= SIGNAL_STRENGTH_BREAKPOINTS.length) {
-                //     break;
-                // }
+                // No need to calculate further signal strengths
+                if (nextBreakpointIndex >= SIGNAL_STRENGTH_BREAKPOINTS.length) {
+                    break;
+                }
                 cycleBreakpoint = nextBreakpointIndex < SIGNAL_STRENGTH_BREAKPOINTS.length ? SIGNAL_STRENGTH_BREAKPOINTS[nextBreakpointIndex] : currentCycle * 100;
             }
 
