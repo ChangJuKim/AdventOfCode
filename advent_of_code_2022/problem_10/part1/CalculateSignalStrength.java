@@ -31,10 +31,8 @@ public class CalculateSignalStrength {
         for (String line : input) {
             String[] command = line.split(" ");
             validateInput(command);
-            System.out.println("(Cycle, register): (" + currentCycle + ", " + register + ") -- line: " + line);
-
+            
             if (currentCycle == cycleBreakpoint || (command[0].equals("addx") && currentCycle + 2 > cycleBreakpoint)) {
-                System.out.println("Adding totalSum by " + register + " * " + cycleBreakpoint + " = " + register * cycleBreakpoint);
                 totalSum += register * cycleBreakpoint;
                 nextBreakpointIndex++;
                 // No need to calculate further signal strengths
@@ -56,7 +54,22 @@ public class CalculateSignalStrength {
         return totalSum;
     }
 
+    /**
+     * Validates a single line of input. The line must either be "noop" or "addx #" where # is an integer
+     * 
+     * @param command A line of input that has been split by spaces.
+     * @return True if the command follows the criteria above. False otherwise.
+     */
     private static boolean validateInput(String[] command) {
-        return true;
+        if (command.length == 1 && command[0].equals("noop")) return true;
+        if (command.length == 2 && command[0].equals("addx")) {
+            try {
+                Integer.parseInt(command[1]);
+                return true;
+            } catch (NumberFormatException ex) {
+
+            }
+        }
+        return false;
     }
 }
