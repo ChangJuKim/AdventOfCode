@@ -33,7 +33,7 @@ public class RenderImage {
         int currentCycle = 1;
         int register = 1;
         int nextBreakpointIndex = 0;
-        ArrayList<String[]> image = new ArrayList<>(IMAGE_HEIGHT);
+        String[][] image = new String[IMAGE_HEIGHT][IMAGE_WIDTH];
         String[] imageRow = new String[IMAGE_WIDTH];
 
         for (String line : input) {
@@ -52,6 +52,7 @@ public class RenderImage {
 
         }
 
+        return image;
     }
 
     /**
