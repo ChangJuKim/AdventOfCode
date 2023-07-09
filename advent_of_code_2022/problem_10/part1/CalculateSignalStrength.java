@@ -42,6 +42,7 @@ public class CalculateSignalStrength {
                 cycleBreakpoint = nextBreakpointIndex < SIGNAL_STRENGTH_BREAKPOINTS.length ? SIGNAL_STRENGTH_BREAKPOINTS[nextBreakpointIndex] : currentCycle * 100;
             }
 
+            // Handle command
             if (command[0].equals("addx")) {
                 register += Integer.parseInt(command[1]);
                 currentCycle += 2;
