@@ -27,4 +27,14 @@ public class PrintArray<T> {
         }
         System.out.println(ary[ary.length - 1] + "]");
     }
+
+    // Cause we can't have a long generic
+    public static void printArray(long[] ary) {
+        if (ary.length == 0) System.out.println("[]");
+        System.out.print("[");
+        for (int i = 0; i < ary.length - 1; i++) {
+            System.out.print(ary[i] + ", ");
+        }
+        System.out.println(ary[ary.length - 1] + "]");
+    }
 }
