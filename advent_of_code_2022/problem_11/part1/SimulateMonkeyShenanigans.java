@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import advent_of_code_2022.common.ParseInput;
 import advent_of_code_2022.common.PrintArray;
+import advent_of_code_2022.problem_11.common.Monkey;
 
 public class SimulateMonkeyShenanigans {
     
