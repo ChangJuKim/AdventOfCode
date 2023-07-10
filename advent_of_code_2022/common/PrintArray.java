@@ -17,4 +17,14 @@ public class PrintArray<T> {
         }
         System.out.println("]");
     }
+
+    // Cause we can't have an int generic
+    public static void printArray(int[] ary) {
+        if (ary.length == 0) System.out.println("[]");
+        System.out.print("[");
+        for (int i = 0; i < ary.length - 1; i++) {
+            System.out.print(ary[i] + ", ");
+        }
+        System.out.println(ary[ary.length - 1] + "]");
+    }
 }

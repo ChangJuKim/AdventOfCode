@@ -1,6 +1,7 @@
 package advent_of_code_2022.problem_11.part1;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import advent_of_code_2022.common.ParseInput;
 import advent_of_code_2022.common.PrintArray;
@@ -8,11 +9,7 @@ import advent_of_code_2022.common.PrintArray;
 public class SimulateMonkeyShenanigans {
     
     static final String INPUT_FILE_NAME = "advent_of_code_2022/problem_11/input.txt";
-    static final String OPERATOR_MULTIPLY = "MULTIPLY";
-    static final String OPERATOR_ADD = "ADD";
-    static final String OPERATOR_SUBTRACT = "SUBTRACT";
-    static final String OPERATOR_DIVIDE = "DIVIDE";
-    static final String OPERATOR_EXPONENT = "EXPONENT";
+    static final int NUM_ROUNDS = 20;
     
     public static void main(String[] args) {
         String[] input = ParseInput.parseInputAsList(INPUT_FILE_NAME);
@@ -21,8 +18,40 @@ public class SimulateMonkeyShenanigans {
 
     public static int productOfTopMonkeyShenanigans(String[] input) {
         Monkey[] monkeys = parseInputAndGetMonkeys(input);
-        new PrintArray<Monkey>().printArray(monkeys);
-        return 0;
+        int[] numTimesMonkeysInspected = countInspectedOverRounds(monkeys);
+        return getProductOfTopTwoValues(numTimesMonkeysInspected);
+    }
+
+    private static int[] countInspectedOverRounds(Monkey[] monkeys) {
+        int[] count = new int[monkeys.length];
+        for (int round = 0; round < NUM_ROUNDS; round++) {
+            for (int monkeyId = 0; monkeyId < monkeys.length; monkeyId++) {
+                Monkey currentMonkey = monkeys[monkeyId];
+                while (currentMonkey.throwNextItem()) {
+                    count[monkeyId]++;
+                }
+                
+            }
+        }
+
+        return count;
+    }
+    
+    private static int getProductOfTopTwoValues(int[] values) {
+        if (values.length == 0) throw new NoSuchElementException("Array has 0 values");
+        if (values.length == 1) return values[0];
+        int max = Math.max(values[0], values[1]);
+        int second = Math.min(values[0], values[1]);
+
+        for (int num : values) {
+            if (num > max) {
+                second = max;
+                max = num;
+            } else if (num > second) {
+                second = num;
+            }
+        }
+        return max * second;
     }
 
     private static Monkey[] parseInputAndGetMonkeys(String[] input) {
@@ -57,19 +86,19 @@ public class SimulateMonkeyShenanigans {
 
                 String operationLine = monkeyParams[2];
                 startIndex = skipPastStart(operationLine, "Operation: new = old ");
-                String operatorFunction;
+                char operatorFunction;
                 int operatorNumber;
                 // Edge case, I really cannot handle this right now.
                 if (operationLine.substring(startIndex).equals("* old")) {
-                    operatorFunction = OPERATOR_EXPONENT;
+                    operatorFunction = '^';
                     operatorNumber = 2;
                 } else {
-                    operatorFunction = determineOperator(operationLine.charAt(startIndex));
+                    operatorFunction = operationLine.charAt(startIndex);
                     operatorNumber = getNumber(operationLine, startIndex + 2);
                 }
 
                 String testLine = monkeyParams[3];
-                String testFunction = determineOperator('/');
+                char testFunction = '/';
                 int testNumber = getNumber(testLine, skipPastStart(testLine, "Test: divisible by "));
 
                 String trueMonkeyLine = monkeyParams[4];
@@ -95,19 +124,19 @@ public class SimulateMonkeyShenanigans {
             }
         }
 
+        // Let each monkey point to each other instead of to their ids
+        for (Monkey monkey : monkeyList) {
+            int trueReceiverID = monkey.getTrueReceiverID();
+            int falseReceiverID = monkey.getFalseReceiverID();
+            if (trueReceiverID < 0 || falseReceiverID < 0 || trueReceiverID >= monkeyList.length || falseReceiverID >= monkeyList.length) {
+                throw new IllegalArgumentException("Monkeys are throwing to nonexistent monkeys: " + trueReceiverID + " / " + falseReceiverID);
+            }
+            monkey.setTrueReceiver(monkeyList[trueReceiverID]);
+            monkey.setFalseReceiver(monkeyList[falseReceiverID]);
+        }
+
         return monkeyList;
     }
-
-    private static String determineOperator(char operator) {
-        if (operator == '+') return OPERATOR_ADD;
-        else if (operator == '-') return OPERATOR_SUBTRACT;
-        else if (operator == '*') return OPERATOR_MULTIPLY;
-        else if (operator == '/') return OPERATOR_DIVIDE;
-        else {
-            throw new IllegalArgumentException("Unable to determine operator: " + operator);
-        }
-    }
-
 
     // Finds first index of startOfLine in line, and returns the index immediately after it.
     private static int skipPastStart(String line, String startOfLine) {
