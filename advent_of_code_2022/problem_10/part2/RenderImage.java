@@ -21,38 +21,58 @@ public class RenderImage {
     }
 
     /**
-     * 
-     * Given a list of commands, calculates the sum of signal strengths at specified breakpoints.
-     * A signal strength = cycle (at a breakpoint) * register value.
-     * Thus, for breakpoints of {20, 60, 100}, the sum will be 20 * (register at cycle 20) + 60 * (register at 60) + 100 * (register at 100).
+     * Creates an image based on the commands to be run. Each command incrememnts the "cycle" by 1 or 2. At each cycle, the image
+     * develops further. A '#' will be placed if the register is at most distance one from the column. Otherwise a '.' is placed.
      * 
      * @param input The list of commands to be run. Each element will either be "noop" (move 1 cycle) or "addx num" (add num to the register after 2 cycles)
-     * @return The total sum of the signal strengths
+     * @return The image formed by the commands
      */
     public static String[][] calculateImage(String[] input) {
-        int currentCycle = 1;
+        int currentCycle = 0;
         int register = 1;
-        int nextBreakpointIndex = 0;
         String[][] image = new String[IMAGE_HEIGHT][IMAGE_WIDTH];
-        String[] imageRow = new String[IMAGE_WIDTH];
 
         for (String line : input) {
             String[] command = line.split(" ");
             validateInput(command);
-            
-            
 
-            // Handle command
+            // Handle commands
             if (command[0].equals("addx")) {
+                fillImage(image, currentCycle, register);
+                currentCycle++;
+                
+                fillImage(image, currentCycle, register);
+                currentCycle ++;
                 register += Integer.parseInt(command[1]);
-                currentCycle += 2;
             } else {
+                fillImage(image, currentCycle, register);
                 currentCycle++;
             }
-
+            if (currentCycle >= IMAGE_HEIGHT * IMAGE_WIDTH) break;
         }
 
         return image;
+    }
+
+    /**
+     * Marks the image if register is a distance 1 or 0 away from the column index.
+     * Image marked is determined based on the current cycle.
+     * If the cycle is too large, or negative, nothing happens
+     * 
+     * @param image A 2D string to be updated. Displays an ascii art
+     * @param currentCycle The cycle that the machine is on. Determines the indices of the image
+     * @param register Determines if a '#' or a '.' should be placed into the image.
+     */
+    public static void fillImage(String[][] image, int currentCycle, int register) {
+        int row = currentCycle / IMAGE_WIDTH;
+        int col = currentCycle % IMAGE_WIDTH;
+        if (currentCycle < 0 || row >= IMAGE_HEIGHT) return;
+
+        if (Math.abs(register - col) <= 1) {
+            image[row][col] = "#";
+        } else {
+            image[row][col] = ".";
+        }
     }
 
     /**
