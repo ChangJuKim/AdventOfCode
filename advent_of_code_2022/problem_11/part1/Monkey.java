@@ -15,16 +15,18 @@ public class Monkey {
     private int operationNumber;
     private String testFunction;
     private int testNumber;
-    private int receiverIfTrue;
-    private int receiverIfFalse;
+    private Monkey receiverIfTrue;
+    private Monkey receiverIfFalse;
 
     public Monkey(int ID) {
         this.ID = ID;
         heldObjects = new LinkedList<>();
     }
 
-    // Expects line to be in the format of "Starting items: 13, 23, 15, 100, 21, 2" where after items: are comma and space separated integers
-    // Adds items to the heldObjects list
+    /**
+     * Adds items to the monkey's list of held items
+     * @param line Expected to be in the format "Starting itms: 13, 23, 15" where after "items:" are comma and space separated integers
+     */
     public void setHeldObjects(String line) {
         String START_OF_LINE = "Starting items: ";
 
@@ -64,22 +66,38 @@ public class Monkey {
     // Expects trueLine to be in the format of "If true: throw to monkey 2" where 2 can be any integer
     // Expects falseLine to be in the format of "If false: throw to monkey 4" where 4 can be any integer
     // Sets testFunction, testNumber, receiverIfTrue and receiverIfFalse fields
-    public void setTests(String testLine, String trueLine, String falseLine) {
+    public void setTestCondition(String testLine) {
         String START_OF_TEST_LINE = "Test: divisble by ";
-        String START_OF_TRUE_LINE = "If true: throw to monkey ";
-        String START_OF_FALSE_LINE = "If false: throw to monkey ";
 
         int index = skipPastStart(testLine, START_OF_TEST_LINE);
         testFunction = OPERATOR_DIVIDE;
         testNumber = getNumber(testLine, index, testLine.length());
-
-        index = skipPastStart(trueLine, START_OF_TRUE_LINE);
-        receiverIfTrue = getNumber(START_OF_TRUE_LINE, index, trueLine.length());
-
-        index = skipPastStart(falseLine, START_OF_FALSE_LINE);
-        receiverIfFalse = getNumber(START_OF_FALSE_LINE, index, falseLine.length());
     }
 
+    public void setMonkey(Monkey trueMonkey, Monkey falseMonkey) {
+        receiverIfTrue = trueMonkey;
+        receiverIfFalse = falseMonkey;
+    }
+
+    public int returnDesiredMonkey(String trueOrFalseLine) {
+        String START_OF_TRUE_LINE = "If true: throw to monkey ";
+        String START_OF_FALSE_LINE = "If false: throw to monkey ";
+
+        try {
+            int index = skipPastStart(trueOrFalseLine, START_OF_TRUE_LINE);
+            return getNumber(START_OF_TRUE_LINE, index, trueOrFalseLine.length());
+        } catch (IllegalArgumentException ex) {
+        }
+
+        try {
+            int index = skipPastStart(trueOrFalseLine, START_OF_FALSE_LINE);
+            return getNumber(START_OF_FALSE_LINE, index, trueOrFalseLine.length());
+        } catch (IllegalArgumentException ex) {
+            throw ex;
+        }
+    }
+
+    
     // Finds first index of startOfLine in line, and returns the index immediately after it.
     private int skipPastStart(String line, String startOfLine) {
         int index = line.indexOf(startOfLine);
