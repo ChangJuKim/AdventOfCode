@@ -28,6 +28,14 @@ public class PrintArray<T> {
         System.out.println(ary[ary.length - 1] + "]");
     }
 
+    public static void print2DArray(int[][] ary) {
+        System.out.println("[");
+        for (int i = 0; i < ary.length; i++) {
+            printArray(ary[i]);
+        }
+        System.out.println("]");
+    }
+
     // Cause we can't have a long generic
     public static void printArray(long[] ary) {
         if (ary.length == 0) System.out.println("[]");
