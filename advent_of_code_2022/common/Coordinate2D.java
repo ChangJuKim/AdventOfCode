@@ -17,6 +17,10 @@ public class Coordinate2D {
         return y;
     }
 
+    public Coordinate2D add(Coordinate2D other) {
+        return new Coordinate2D(x + other.x, y + other.y);
+    }
+
     // Distance if the coordinates can only travel vertically or horizontally
     public int getManhattanDistance(Coordinate2D other) {
         return Math.abs(x - other.x) + Math.abs(y - other.y);
