@@ -51,6 +51,41 @@ public class ParseInput {
         return builder.toString();
     }
 
+    public static char[][] parseInputAsCharMatrix(String fileName) {
+        File file = new File(fileName);
+        ArrayList<Character[]> tempList = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Character[] row = new Character[line.length()];
+
+                for (int i = 0; i < line.length(); i++) {
+                    row[i] = line.charAt(i);
+                }
+
+                tempList.add(row);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + file);
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex);
+        }
+
+        char[][] charMatrix = new char[tempList.size()][];
+
+        for (int i = 0; i < charMatrix.length; i++) {
+            Character[] row = tempList.get(i);
+            charMatrix[i] = new char[row.length];
+
+            for (int j = 0; j < row.length; j++) {
+                charMatrix[i][j] = row[j];
+            }
+        }
+
+        return charMatrix;
+    } 
+
     public static int[][] parseInputAsPositiveIntegerMatrix(String fileName) {
         File file = new File(fileName);
         return parseInputAsPositiveIntegerMatrix(file);
@@ -79,17 +114,17 @@ public class ParseInput {
             System.out.println(ex);
         }
 
-        int[][] integerArray = new int[tempList.size()][];
+        int[][] integerMatrix = new int[tempList.size()][];
 
-        for (int i = 0; i < integerArray.length; i++) {
+        for (int i = 0; i < integerMatrix.length; i++) {
             Integer[] row = tempList.get(i);
-            integerArray[i] = new int[row.length];
+            integerMatrix[i] = new int[row.length];
 
             for (int j = 0; j < row.length; j++) {
-                integerArray[i][j] = row[j];
+                integerMatrix[i][j] = row[j];
             }
         }
 
-        return integerArray;
+        return integerMatrix;
     }
 }
