@@ -10,6 +10,8 @@ public class FindRoute {
     static final String INPUT_FILE_NAME = "advent_of_code_2022/problem_12/input.txt";
     static final char START_LOCATION = 'S';
     static final char END_LOCATION = 'E';
+    static final char LOWEST_ELEVATION = 'a';
+    static final char HIGHEST_ELEVATION = 'z';
     static final Coordinate2D[] directions = new Coordinate2D[]{ new Coordinate2D(0, 1),
                                                                  new Coordinate2D(1, 0),
                                                                  new Coordinate2D(0, -1), 
@@ -22,16 +24,19 @@ public class FindRoute {
 
     /**
      * Finds the total number of steps to the destination given a height map, and starting and ending characters.
-     * The height map is represented as a 2D char array, where 'a' is the lowest, 'b' is the next and so on until 'z'.
+     * The height map is represented as a 2D char array, where 'a' is the lowest elevation, 'b' is the next and so on until 'z'.
      * 
      * @param matrix The 2D char array, the height map.
-     * @return The number of steps to reach the destination (indicated by a constant)
+     * @return The number of steps required to reach the destination.
      */
     public static int countStepsToDestination(char[][] matrix) {
         Coordinate2D start = findPosition(matrix, START_LOCATION);
         Coordinate2D end = findPosition(matrix, END_LOCATION);
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("Could not find start or end position");
+        }
+
         int[][] distanceMatrix = createDistanceMatrix(matrix);
-        
         traverse(matrix, distanceMatrix, start, 0);
 
         return distanceMatrix[end.getX()][end.getY()];
@@ -42,24 +47,24 @@ public class FindRoute {
      * Current is assumed to be a valid location on the matrix, as we are checking for validity before stepping.
      * The step count may not be the shortest path to the current location. If it is not and we found shorter already, the function ends.
      * 
-     * @param charMatrix 2D char array that represents the heightmap.
+     * @param heightMap 2D char array that represents the height map.
      * @param distanceMatrix 2D int array that is to be populated. Represents fewest steps to get to each location from the start.
-     * @param current The current location of the matrix.
-     * @param stepCount How many steps it took to get to the current location.
+     * @param currentLocation The current location of the matrix.
+     * @param currentStepCount How many steps it took to get to the current location.
      */
-    private static void traverse(char[][] charMatrix, int[][] distanceMatrix, Coordinate2D current, int stepCount) {
-        int distancePreviouslyTravelled = distanceMatrix[current.getX()][current.getY()];
+    private static void traverse(char[][] heightMap, int[][] distanceMatrix, Coordinate2D currentLocation, int currentStepCount) {
+        int distancePreviouslyTravelled = distanceMatrix[currentLocation.getX()][currentLocation.getY()];
         // We previously came here, and faster
-        if (distancePreviouslyTravelled != -1 && distancePreviouslyTravelled <= stepCount) return;
-        distanceMatrix[current.getX()][current.getY()] = stepCount;
+        if (distancePreviouslyTravelled != -1 && distancePreviouslyTravelled <= currentStepCount) return;
+        distanceMatrix[currentLocation.getX()][currentLocation.getY()] = currentStepCount;
 
-        char currentElevation = charMatrix[current.getX()][current.getY()];
+        char currentElevation = heightMap[currentLocation.getX()][currentLocation.getY()];
         if (currentElevation == END_LOCATION) return;
 
         for (Coordinate2D direction : directions) {
-            Coordinate2D next = current.add(direction);
-            if (isValidStep(charMatrix, currentElevation, next)) {
-                traverse(charMatrix, distanceMatrix, next, stepCount + 1);
+            Coordinate2D next = currentLocation.add(direction);
+            if (isValidStep(heightMap, currentElevation, next)) {
+                traverse(heightMap, distanceMatrix, next, currentStepCount + 1);
             }
         }
     }
@@ -79,7 +84,7 @@ public class FindRoute {
                 }
             }
         }
-        throw new IllegalArgumentException("Matrix does not have the character: " + desiredCharacter);
+        return null;
     }
 
     /**
@@ -89,11 +94,9 @@ public class FindRoute {
      * @return A new 2D int array with dimensions equal to matrix, and filled with -1.
      */
     private static int[][] createDistanceMatrix(char[][] matrix) {
-        int[][] newMatrix = new int[matrix.length][];
-        for (int i = 0; i < matrix.length; i++) {
-            int[] row = new int[matrix[i].length];
+        int[][] newMatrix = new int[matrix.length][matrix[0].length];
+        for (int[] row : newMatrix) {
             Arrays.fill(row, -1);
-            newMatrix[i] = row;
         }
         return newMatrix;
     }
@@ -122,8 +125,11 @@ public class FindRoute {
      * @return True if next is at most one higher than current. False otherwise.
      */
     private static boolean isAdjacentOrLower(char current, char next) {
-        if (current == START_LOCATION) current = 'a';
-        if (next == END_LOCATION) next = 'z';
-        return (current >= 'a' && current <= 'z' && next >= 'a' && next <= 'z' && current + 1 >= next);
+        if (current == START_LOCATION) current = LOWEST_ELEVATION;
+        if (next == END_LOCATION) next = HIGHEST_ELEVATION;
+        
+        return (current >= LOWEST_ELEVATION && current <= HIGHEST_ELEVATION 
+            && next >= LOWEST_ELEVATION && next <= HIGHEST_ELEVATION 
+            && current + 1 >= next);
     }
 }
