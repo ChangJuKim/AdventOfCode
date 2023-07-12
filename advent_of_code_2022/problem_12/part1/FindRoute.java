@@ -36,8 +36,12 @@ public class FindRoute {
             throw new IllegalArgumentException("Could not find start or end position");
         }
 
+        matrix[start.getX()][start.getY()] = LOWEST_ELEVATION;
+        matrix[end.getX()][end.getY()] = HIGHEST_ELEVATION;
         int[][] distanceMatrix = createDistanceMatrix(matrix);
+        
         traverse(matrix, distanceMatrix, start, 0);
+        PrintArray.print2DArray(distanceMatrix);
 
         return distanceMatrix[end.getX()][end.getY()];
     }
@@ -59,8 +63,7 @@ public class FindRoute {
         distanceMatrix[currentLocation.getX()][currentLocation.getY()] = currentStepCount;
 
         char currentElevation = heightMap[currentLocation.getX()][currentLocation.getY()];
-        if (currentElevation == END_LOCATION) return;
-
+        
         for (Coordinate2D direction : directions) {
             Coordinate2D next = currentLocation.add(direction);
             if (isValidStep(heightMap, currentElevation, next)) {
@@ -125,9 +128,6 @@ public class FindRoute {
      * @return True if next is at most one higher than current. False otherwise.
      */
     private static boolean isAdjacentOrLower(char current, char next) {
-        if (current == START_LOCATION) current = LOWEST_ELEVATION;
-        if (next == END_LOCATION) next = HIGHEST_ELEVATION;
-        
         return (current >= LOWEST_ELEVATION && current <= HIGHEST_ELEVATION 
             && next >= LOWEST_ELEVATION && next <= HIGHEST_ELEVATION 
             && current + 1 >= next);
