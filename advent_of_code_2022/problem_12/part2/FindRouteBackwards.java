@@ -1,0 +1,154 @@
+package advent_of_code_2022.problem_12.part2;
+
+import java.util.Arrays;
+
+import advent_of_code_2022.common.Coordinate2D;
+import advent_of_code_2022.common.ParseInput;
+import advent_of_code_2022.common.PrintArray;
+
+public class FindRouteBackwards {
+    static final String INPUT_FILE_NAME = "advent_of_code_2022/problem_12/input.txt";
+    static final char START_LOCATION = 'S';
+    static final char END_LOCATION = 'E';
+    static final char LOWEST_ELEVATION = 'a';
+    static final char HIGHEST_ELEVATION = 'z';
+    static final Coordinate2D[] directions = new Coordinate2D[]{ new Coordinate2D(0, 1),
+                                                                 new Coordinate2D(1, 0),
+                                                                 new Coordinate2D(0, -1), 
+                                                                 new Coordinate2D(-1, 0) };
+
+    public static void main(String[] args) {
+        char[][] input = ParseInput.parseInputAsCharMatrix(INPUT_FILE_NAME);
+        System.out.println("The smallest number of steps required to reach the end from any start is " + countStepsToLowestElevation(input));
+    }
+
+    /**
+     * Finds the total number of steps to the destination given a height map, and starting and ending characters.
+     * The height map is represented as a 2D char array, where 'a' is the lowest elevation, 'b' is the next and so on until 'z'.
+     * 
+     * @param matrix The 2D char array, the height map.
+     * @return The number of steps required to reach any starting node from the end.
+     */
+    public static int countStepsToLowestElevation(char[][] matrix) {
+        Coordinate2D start = findPosition(matrix, START_LOCATION);
+        Coordinate2D end = findPosition(matrix, END_LOCATION);
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("Could not find start or end position");
+        }
+        matrix[start.getX()][start.getY()] = LOWEST_ELEVATION;
+        matrix[end.getX()][end.getY()] = HIGHEST_ELEVATION;
+        int[][] distanceMatrix = createDistanceMatrix(matrix);
+        
+        traverse(matrix, distanceMatrix, end, 0);
+        
+        return getMinValueMatchingChar(matrix, distanceMatrix, LOWEST_ELEVATION);
+    }
+
+    /**
+     * Recursive function that takes steps in any of the 4 directions that are valid. Populates the distance matrix with the current step count.
+     * Current is assumed to be a valid location on the matrix, as we are checking for validity before stepping.
+     * The step count may not be the shortest path to the current location. If it is not and we found shorter already, the function ends.
+     * 
+     * @param heightMap 2D char array that represents the height map.
+     * @param distanceMatrix 2D int array that is to be populated. Represents fewest steps to get to each location from the start.
+     * @param currentLocation The current location of the matrix.
+     * @param currentStepCount How many steps it took to get to the current location.
+     */
+    private static void traverse(char[][] heightMap, int[][] distanceMatrix, Coordinate2D currentLocation, int currentStepCount) {
+        int distancePreviouslyTravelled = distanceMatrix[currentLocation.getX()][currentLocation.getY()];
+        // We previously came here, and faster
+        if (distancePreviouslyTravelled != -1 && distancePreviouslyTravelled <= currentStepCount) return;
+        distanceMatrix[currentLocation.getX()][currentLocation.getY()] = currentStepCount;
+
+        char currentElevation = heightMap[currentLocation.getX()][currentLocation.getY()];
+        
+        for (Coordinate2D direction : directions) {
+            Coordinate2D next = currentLocation.add(direction);
+            if (isValidStep(heightMap, currentElevation, next)) {
+                traverse(heightMap, distanceMatrix, next, currentStepCount + 1);
+            }
+        }
+    }
+
+    /**
+     * Finds the first instance of the desired character, and returns its coordinates
+     * 
+     * @param matrix The 2D matrix to search
+     * @param desiredCharacter The character we are looking for
+     * @return The coordinate of the first character in the matrix we find that matches the desired
+     */
+    private static Coordinate2D findPosition(char[][] matrix, char desiredCharacter) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == desiredCharacter) {
+                    return new Coordinate2D(i, j);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a new 2D int array of the same dimensions as matrix, filled with -1. 
+     * 
+     * @param matrix The heightmap/grid. Gives the dimensions of the resulting 2D int array.
+     * @return A new 2D int array with dimensions equal to matrix, and filled with -1.
+     */
+    private static int[][] createDistanceMatrix(char[][] matrix) {
+        int[][] newMatrix = new int[matrix.length][matrix[0].length];
+        for (int[] row : newMatrix) {
+            Arrays.fill(row, -1);
+        }
+        return newMatrix;
+    }
+    
+    /**
+     * Determines if the next coordinate is a valid place to go to.
+     * This means it is not off the grid, and the elevation is at least one lower than the current elevation.
+     * 
+     * @param matrix 2D array of characters, the heightmap grid.
+     * @param current The current elevation represented by a lowercase letter.
+     * @param next The coordinate of the next desired location.
+     * @return True if next is not off the grid and is at least one lower than current elevation. False otherwise.
+     */
+    private static boolean isValidStep(char[][] matrix, char current, Coordinate2D next) {
+        int x = next.getX();
+        int y = next.getY();
+        return x >= 0 && y >= 0 && x < matrix.length && y < matrix[x].length && isAdjacentOrHigher(current, matrix[x][y]);
+    }
+    
+    /**
+     * As we are going backwards from end, we want to reverse our logic from part1.
+     * Determines if the current character is at least one lower than the next character. This means next can be much higher than current.
+     * 
+     * @param current A lowercase letter (or a constant) representing the elevation/character you are currently on.
+     * @param next A lowercase letter (or a constant) representing the elevation/character you are trying to go to.
+     * @return True if next is at least one lower than current. False otherwise.
+     */
+    private static boolean isAdjacentOrHigher(char current, char next) {
+        return (current >= LOWEST_ELEVATION && current <= HIGHEST_ELEVATION 
+        && next >= LOWEST_ELEVATION && next <= HIGHEST_ELEVATION 
+        && current - 1 <= next);
+    }
+    
+    /**
+     * Finds all instances of a specified character in a character matrix and returns the minimum value in the
+     * corresponding destination matrix  
+     * 
+     * @param matrix char matrix to match characters
+     * @param destinationMatrix int matrix to pull values from. Identical in dimensions to matrix
+     * @param charToMatch the desired character
+     * @return The smallest value in destinationMatrix that correspondingly has the charToMatch in the matrix
+     */
+    private static int getMinValueMatchingChar(char[][] matrix, int[][] destinationMatrix, char charToMatch) {
+        int minValue = Integer.MAX_VALUE;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == charToMatch && destinationMatrix[i][j] != -1) {
+                    minValue = Math.min(minValue, destinationMatrix[i][j]);
+               }
+            }
+        }
+        return minValue;
+    }
+}
