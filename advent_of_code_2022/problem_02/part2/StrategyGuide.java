@@ -1,7 +1,6 @@
 package advent_of_code_2022.problem_02.part2;
 
 import advent_of_code_2022.common.ParseInput;
-import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +11,7 @@ public class StrategyGuide {
 
 
     public static void main(String[] args) {
-        String[] inputArray = ParseInput.parseInputAsList(new File(INPUT_PATH));
+        String[] inputArray = ParseInput.parseInputAsList(INPUT_PATH);
         int score = 0;
         try {
             score = findTotalScore(inputArray);
