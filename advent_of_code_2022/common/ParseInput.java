@@ -14,10 +14,6 @@ public class ParseInput {
 
     public static String[] parseInputAsList(String fileName) {
         File file = new File(fileName);
-        return parseInputAsList(file);
-    }
-
-    public static String[] parseInputAsList(File file) {
         String[] linesArray = new String[0];
         try (Scanner scanner = new Scanner(file)) {
             ArrayList<String> lines = new ArrayList<String>();
@@ -36,10 +32,6 @@ public class ParseInput {
 
     public static String parseInputAsString(String fileName) {
         File file = new File(fileName);
-        return parseInputAsString(file);
-    }
-
-    public static String parseInputAsString(File file) {
         StringBuilder builder = new StringBuilder();
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -88,10 +80,6 @@ public class ParseInput {
 
     public static int[][] parseInputAsPositiveIntegerMatrix(String fileName) {
         File file = new File(fileName);
-        return parseInputAsPositiveIntegerMatrix(file);
-    }
-
-    public static int[][] parseInputAsPositiveIntegerMatrix(File file) {
         ArrayList<Integer[]> tempList = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(file)) {
