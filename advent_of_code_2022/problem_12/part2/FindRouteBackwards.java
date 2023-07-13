@@ -146,7 +146,7 @@ public class FindRouteBackwards {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == charToMatch && destinationMatrix[i][j] != -1) {
                     minValue = Math.min(minValue, destinationMatrix[i][j]);
-               }
+                }
             }
         }
         return minValue;
