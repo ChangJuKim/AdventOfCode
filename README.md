@@ -37,9 +37,9 @@ I will log my journey here.
 ## [Day 11 Monkey in the Middle](https://github.com/ChangJuKim/AdventOfCode/tree/main/advent_of_code_2022/problem_11):
   * Learning about builder design pattern. Using it to create Monkeys.
     * I'm sure I did not use it well, but I learned something.
-  * Brain is fried after looking at VS Code autocomplete for 3 hours. No good coding standards today except constants, input validation, and builder design pattern.
+  * Practiced constants, input validation, and builder design pattern.
     * Didn't even properly use builder design pattern as can be seen in Monkey's worrysomeDivider, and true/falseReceiverId variables.
-    * Input is also extremely strict. Would have preferred to make input more lenient.
+    * Also did not create a generous input validation -- input is also extremely strict. Would have preferred to make input more lenient.
   
     
     
