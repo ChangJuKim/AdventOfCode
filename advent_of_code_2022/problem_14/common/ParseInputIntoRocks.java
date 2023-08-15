@@ -1,4 +1,4 @@
-package advent_of_code_2022.problem_14.part1;
+package advent_of_code_2022.problem_14.common;
 
 import java.util.HashSet;
 
