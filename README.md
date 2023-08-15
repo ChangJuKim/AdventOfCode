@@ -1,5 +1,5 @@
 # AdventOfCode
-My solutions to [Advent of Code](https://adventofcode.com/2022) problems.
+My solutions to [Advent of Code 2022](https://adventofcode.com/2022) problems.
 
 I will log my journey here.
 
